@@ -46,7 +46,7 @@ import java.util.stream.Stream;
      *  Process a line of script input.
      */
     public void load(Stream<String> input) throws IOException {
-        List<Decomp> lastDecomp = null;
+        List<Decomposition> lastDecomp = null;
         List<String> lastReasemb = null;
 
         for (String s : input.collect(Collectors.toList())) {
@@ -66,9 +66,9 @@ import java.util.stream.Stream;
                 lastReasemb = new ArrayList<>();
                 String temp = lines[1];
                 if (EString.match(temp, "$ *", lines)) {
-                    lastDecomp.add(new Decomp(lines[0], true, lastReasemb));
+                    lastDecomp.add(new Decomposition(lines[0], true, lastReasemb));
                 } else {
-                    lastDecomp.add(new Decomp(temp, false, lastReasemb));
+                    lastDecomp.add(new Decomposition(temp, false, lastReasemb));
                 }
             } else if (EString.match(s, "*key: * #*", lines)) {
                 lastDecomp = new ArrayList<>();
@@ -188,7 +188,7 @@ import java.util.stream.Stream;
      */
     String decompose(Key key, String s, Key gotoKey) {
         String reply[] = new String[10];
-        for (Decomp d : key.decomp()) {
+        for (Decomposition d : key.decomp()) {
             String pat = d.pattern();
             if (syns.matchDecomp(s, pat, reply)) {
                 String rep = assemble(d, reply, gotoKey);
@@ -205,7 +205,7 @@ import java.util.stream.Stream;
      *    the gotoKey to use.
      *  Otherwise return the response.
      */
-    String assemble(Decomp d, String reply[], Key gotoKey) {
+    String assemble(Decomposition d, String reply[], Key gotoKey) {
         String lines[] = new String[3];
         d.stepRule();
         String rule = d.nextRule();

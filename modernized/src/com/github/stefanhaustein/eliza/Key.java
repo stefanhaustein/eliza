@@ -12,12 +12,12 @@ public class Key {
     /** The numerical rank */
     private int rank;
     /** The list of decompositions */
-    private List<Decomp> decomp;
+    private List<Decomposition> decomp;
 
     /**
      *  Initialize the key.
      */
-    Key(String key, int rank, List<Decomp> decomp) {
+    Key(String key, int rank, List<Decomposition> decomp) {
         this.key = key;
         this.rank = rank;
         this.decomp = decomp;
@@ -56,7 +56,7 @@ public class Key {
     /**
      *  Get the decomposition list.
      */
-    public List<Decomp> decomp() {
+    public List<Decomposition> decomp() {
         return decomp;
     }
 }

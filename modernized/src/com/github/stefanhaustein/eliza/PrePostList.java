@@ -13,7 +13,7 @@ public class PrePostList extends Vector {
      *  Add another entry to the list.
      */
     public void add(String src, String dest) {
-        addElement(new PrePost(src, dest));
+        addElement(new Transform(src, dest));
     }
 
 
@@ -23,9 +23,9 @@ public class PrePostList extends Vector {
      *  return he corresponding dest.
      *  If no match, return the input.
      */
-    String xlate(String str) {
+    private String xlate(String str) {
         for (int i = 0; i < size(); i++) {
-            PrePost p = (PrePost)elementAt(i);
+            Transform p = (Transform)elementAt(i);
             if (str.equals(p.src())) {
                 return p.dest();
             }

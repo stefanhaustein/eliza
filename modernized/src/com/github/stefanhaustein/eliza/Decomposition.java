@@ -5,7 +5,7 @@ import java.util.List;
 /**
  *  Eliza decomposition rule
  */
-public class Decomp {
+public class Decomposition {
     /** The decomp pattern */
     private String pattern;
     /** The mem flag */
@@ -18,7 +18,7 @@ public class Decomp {
     /**
      *  Initialize the decomp rule
      */
-    Decomp(String pattern, boolean mem, List<String> reasemb) {
+    Decomposition(String pattern, boolean mem, List<String> reasemb) {
         this.pattern = pattern;
         this.mem = mem;
         this.reasemb = reasemb;

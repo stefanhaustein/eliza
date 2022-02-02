@@ -5,15 +5,12 @@ package com.github.stefanhaustein.eliza;
  */
 public class EString {
 
-    /** The digits. */
-    static final String num = "0123456789";
-
     /**
      *  Look for a match between the string and the pattern.
      *  Return count of maching characters before * or #.
      *  Return -1 if strings do not match.
      */
-    public static int amatch(String str, String pattern) {
+    public static int aMatch(String str, String pattern) {
         int count = 0;
         int i = 0;  // march through str
         int j = 0;  // march through pat
@@ -34,10 +31,10 @@ public class EString {
      *  Return the string position in str of the match,
      *  or -1 for no match.
      */
-    public static int findPat(String str, String pat) {
+    public static int findPattern(String str, String pattern) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (amatch(str.substring(i), pat) >= 0)
+            if (aMatch(str.substring(i), pattern) >= 0)
                 return count;
             count++;
         }
@@ -51,7 +48,7 @@ public class EString {
     public static int findNum(String str) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (num.indexOf(str.charAt(i)) == -1)
+            if (!Character.isDigit(str.charAt(i)))
                 return count;
             count++;
         }
@@ -77,7 +74,7 @@ public class EString {
                 } else {
                     //  * is not last in pat
                     //  find using remaining pat
-                    n = findPat(str.substring(i), pat.substring(pos+1));
+                    n = findPattern(str.substring(i), pat.substring(pos+1));
                 }
                 if (n < 0) return false;
                 matches[j++] = str.substring(i, i+n);
@@ -87,7 +84,7 @@ public class EString {
                 matches[j++] = str.substring(i, i+n);
                 i += n; pos++;
             } else {
-                int n = amatch(str.substring(i), pat.substring(pos));
+                int n = aMatch(str.substring(i), pat.substring(pos));
                 if (n <= 0) return false;
                 i += n; pos += n;
             }
@@ -114,7 +111,7 @@ public class EString {
                 } else {
                     //  * is not last in pat
                     //  find using remaining pat
-                    n = findPat(str, pat.substring(1));
+                    n = findPattern(str, pat.substring(1));
                 }
                 if (n < 0) return false;
                 matches[j++] = str.substring(0, n);
@@ -128,7 +125,7 @@ public class EString {
  //           } else if (p == ' ' && str.length() > 0 && str.charAt(0) != ' ') {
  //               pat = pat.substring(1);
             } else {
-                int n = amatch(str, pat);
+                int n = aMatch(str, pat);
                 if (n <= 0) return false;
                 str = str.substring(n);
                 pat = pat.substring(n);

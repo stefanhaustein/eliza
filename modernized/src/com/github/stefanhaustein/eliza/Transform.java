@@ -1,28 +1,19 @@
 package com.github.stefanhaustein.eliza;
 
 /**
- *  Eliza pre-post entry (two words).
  *  This is used to store pre transforms or post transforms.
  */
-public class PrePost {
+public class Transform {
     /** The words */
-    String src;
-    String dest;
+    private final String src;
+    private final String dest;
 
     /**
-     *  Initialize the pre-post entry.
+     *  Initialize the entry.
      */
-    PrePost(String src, String dest) {
+    Transform(String src, String dest) {
         this.src = src;
         this.dest = dest;
-    }
-
-    /**
-     *  Print the pre-post entry.
-     */
-    public void print(int indent) {
-        for (int i = 0; i < indent; i++) System.out.print(" ");
-        System.out.println("pre-post: " + src + "  " + dest);
     }
 
     /**
