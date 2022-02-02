@@ -13,15 +13,6 @@ public class KeyStack {
     /** The top of the key stack */
     int keyTop = 0;
 
-    /**
-     *  Prints the key stack.
-     */
-    public void print() {
-        System.out.println("Key stack " + keyTop);
-        for (int i = 0; i < keyTop; i++) {
-            keyStack[i].printKey(0);
-        }
-    }
 
     /**
      *  Get the stack size.
@@ -56,7 +47,7 @@ public class KeyStack {
         }
         int i;
         for (i = keyTop; i > 0; i--) {
-            if (key.rank > keyStack[i-1].rank) keyStack[i] = keyStack[i-1];
+            if (key.rank() > keyStack[i-1].rank()) keyStack[i] = keyStack[i-1];
             else break;
         }
         keyStack[i] = key;

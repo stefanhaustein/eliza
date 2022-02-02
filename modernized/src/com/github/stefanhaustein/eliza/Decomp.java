@@ -1,5 +1,7 @@
 package com.github.stefanhaustein.eliza;
 
+import java.util.List;
+
 /**
  *  Eliza decomposition rule
  */
@@ -9,28 +11,18 @@ public class Decomp {
     /** The mem flag */
     private boolean mem;
     /** The reassembly list */
-    private ReasembList reasemb;
+    private List<String> reasemb;
     /** The current reassembly point */
     private int currReasmb;
 
     /**
      *  Initialize the decomp rule
      */
-    Decomp(String pattern, boolean mem, ReasembList reasemb) {
+    Decomp(String pattern, boolean mem, List<String> reasemb) {
         this.pattern = pattern;
         this.mem = mem;
         this.reasemb = reasemb;
         this.currReasmb = 100;
-    }
-
-    /**
-     *  Print out the decomp rule.
-     */
-    public void print(int indent) {
-        String m = mem ? "true" : "false";
-        for (int i = 0; i < indent; i++) System.out.print(" ");
-        System.out.println("decomp: " + pattern + " " + m);
-        reasemb.print(indent + 2);
     }
 
     /**
@@ -55,7 +47,7 @@ public class Decomp {
             System.out.println("No reassembly rule.");
             return null;
         }
-        return (String)reasemb.elementAt(currReasmb);
+        return reasemb.get(currReasmb);
     }
 
     /**

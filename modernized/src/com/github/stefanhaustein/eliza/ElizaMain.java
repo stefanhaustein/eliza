@@ -2,8 +2,7 @@ package com.github.stefanhaustein.eliza;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
 
 
     /** The key list */
-    KeyList keys = new KeyList();
+    Map<String, Key> keys = new LinkedHashMap<>();
     /** The syn list */
     SynList syns = new SynList();
     /** The pre list */
@@ -29,9 +28,6 @@ import java.util.stream.Stream;
     String finl = "Goodbye.";
     /** Quit list */
     List<String> quit = new ArrayList<>();
-
-    /** Key stack */
-    KeyStack keyStack = new KeyStack();
 
     /** Memory */
     Mem mem = new Mem();
@@ -51,7 +47,7 @@ import java.util.stream.Stream;
      */
     public void load(Stream<String> input) throws IOException {
         List<Decomp> lastDecomp = null;
-        ReasembList lastReasemb = null;
+        List<String> lastReasemb = null;
 
         for (String s : input.collect(Collectors.toList())) {
             String lines[] = new String[4];
@@ -67,7 +63,7 @@ import java.util.stream.Stream;
                     System.out.println("Error: no last decomp");
                     return;
                 }
-                lastReasemb = new ReasembList();
+                lastReasemb = new ArrayList<>();
                 String temp = lines[1];
                 if (EString.match(temp, "$ *", lines)) {
                     lastDecomp.add(new Decomp(lines[0], true, lastReasemb));
@@ -85,11 +81,11 @@ import java.util.stream.Stream;
                         System.out.println("Number is wrong in key: " + lines[2]);
                     }
                 }
-                keys.add(lines[1], n, lastDecomp);
+                keys.put(lines[1], new Key(lines[1], n, lastDecomp));
             } else if (EString.match(s, "*key: *", lines)) {
                 lastDecomp = new ArrayList<>();
                 lastReasemb = null;
-                keys.add(lines[1], 0, lastDecomp);
+                keys.put(lines[1], new Key(lines[1], 0, lastDecomp));
             } else if (EString.match(s, "*synon: * *", lines)) {
                 List<String> words = new ArrayList<>();
                 words.add(lines[1]);
@@ -123,8 +119,7 @@ import java.util.stream.Stream;
     public String processInput(String s) {
         String reply;
         //  Do some input transformations first.
-        s = EString.translate(s, "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                                 "abcdefghijklmnopqrstuvwxyz");
+        s = s.toLowerCase(Locale.ROOT);
         s = EString.translate(s, "@#$%^&*()_-+=~`{[}]|:;<>\\\"",
                                  "                          "  );
         s = EString.translate(s, ",?!", "...");
@@ -146,7 +141,7 @@ import java.util.stream.Stream;
         if (m != null) return m;
 
         //  No memory, reply with xnone.
-        Key key = keys.getKey("xnone");
+        Key key = keys.get("xnone");
         if (key != null) {
             Key dummy = null;
             reply = decompose(key, s, dummy);
@@ -170,10 +165,9 @@ import java.util.stream.Stream;
             finished = true;
             return finl;
         }
-        keys.buildKeyStack(keyStack, s);
-        for (int i = 0; i < keyStack.keyTop(); i++) {
+        for (Key key : buildKeyStack(keys, s.trim())) {
             Key gotoKey = new Key();
-            String reply = decompose(keyStack.key(i), s, gotoKey);
+            String reply = decompose(key, s, gotoKey);
             if (reply != null) return reply;
             //  If decomposition returned gotoKey, try it
             while (gotoKey.key() != null) {
@@ -217,7 +211,7 @@ import java.util.stream.Stream;
         String rule = d.nextRule();
         if (EString.match(rule, "goto *", lines)) {
             //  goto rule -- set gotoKey and return false.
-            gotoKey.copy(keys.getKey(lines[0]));
+            gotoKey.copy(keys.get(lines[0]));
             if (gotoKey.key() != null) return null;
             System.out.println("Goto rule did not match key: " + lines[0]);
             return null;
@@ -288,5 +282,25 @@ import java.util.stream.Stream;
 
     }
 
+
+
+    /**
+     *  Break the string s into words.
+     *  For each word, if isKey is true, then push the key
+     *  into the stack.
+     */
+    public static List<Key> buildKeyStack(Map<String, Key> keyMap, String s) {
+        List<Key> stack = new ArrayList<>();
+        String lines[] = new String[2];
+        while (EString.match(s, "* *", lines)) {
+            Key k = keyMap.get(lines[0]);
+            if (k != null) stack.add(k);
+            s = lines[1];
+        }
+        Key k = keyMap.get(s);
+        if (k != null) stack.add(k);
+        //stack.print();
+        return stack;
+    }
 
  }

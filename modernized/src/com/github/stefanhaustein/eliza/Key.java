@@ -8,11 +8,11 @@ import java.util.List;
  */
 public class Key {
     /** The key itself */
-    String key;
+    private String key;
     /** The numerical rank */
-    int rank;
+    private int rank;
     /** The list of decompositions */
-    List<Decomp> decomp;
+    private List<Decomp> decomp;
 
     /**
      *  Initialize the key.
@@ -38,14 +38,6 @@ public class Key {
         decomp = k.decomp();
     }
 
-
-    /**
-     *  Print the key and rank only, not the rest.
-     */
-    public void printKey(int indent) {
-        for (int i = 0; i < indent; i++) System.out.print(" ");
-        System.out.println("key: " + key + " " + rank);
-    }
 
     /**
      *  Get the key value.
