@@ -1,5 +1,6 @@
 package com.github.stefanhaustein.eliza;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -11,29 +12,18 @@ public class SynList extends Vector {
     /**
      *  Add another word list the the synonym list.
      */
-    public void add(WordList words) {
+    public void add(List<String> words) {
         addElement(words);
     }
 
-    /**
-     *  Prnt the synonym lists.
-     */
-    public void print(int indent) {
-        for (int i = 0; i < size(); i++) {
-            for (int j = 0; j < indent; j++) System.out.print(" ");
-            System.out.print("synon: ");
-            WordList w = (WordList)elementAt(i);
-            w.print(indent);
-        }
-    }
 
     /**
      *  Find a synonym word list given the any word in it.
      */
-    public WordList find(String s) {
+    public List<String> find(String s) {
         for (int i = 0; i < size(); i++) {
-            WordList w = (WordList)elementAt(i);
-            if (w.find(s)) return w;
+            List<String> w = (List<String>) elementAt(i);
+            if (w.contains(s)) return w;
         }
         return null;
     }
@@ -52,7 +42,7 @@ public class SynList extends Vector {
         String synWord = lines[1];
         String theRest = " " + lines[2];
         //  Look up the synonym
-        WordList syn = find(synWord);
+        List<String> syn = find(synWord);
         if (syn == null) {
             System.out.println("Could not fnd syn list for " + synWord);
             return false;
@@ -60,14 +50,14 @@ public class SynList extends Vector {
         //  Try each synonym individually
         for (int i = 0; i < syn.size(); i++) {
             //  Make a modified pattern
-            pat = first + (String)syn.elementAt(i) + theRest;
+            pat = first + syn.get(i) + theRest;
             if (EString.match(str, pat, lines)) {
                 int n = EString.count(first, '*');
                 //  Make room for the synonym in the match list.
                 for (int j = lines.length-2; j >= n; j--)
                     lines[j+1] = lines[j];
                 //  The synonym goes in the match list.
-                lines[n] = (String)syn.elementAt(i);
+                lines[n] = syn.get(i);
                 return true;
             }
         }

@@ -28,7 +28,7 @@ import java.util.stream.Stream;
     /** Final string */
     String finl = "Goodbye.";
     /** Quit list */
-    WordList quit = new WordList();
+    List<String> quit = new ArrayList<>();
 
     /** Key stack */
     KeyStack keyStack = new KeyStack();
@@ -91,7 +91,7 @@ import java.util.stream.Stream;
                 lastReasemb = null;
                 keys.add(lines[1], 0, lastDecomp);
             } else if (EString.match(s, "*synon: * *", lines)) {
-                WordList words = new WordList();
+                List<String> words = new ArrayList<>();
                 words.add(lines[1]);
                 s = lines[2];
                 while (EString.match(s, "* *", lines)) {
@@ -166,7 +166,7 @@ import java.util.stream.Stream;
     String sentence(String s) {
         s = pre.translate(s);
         s = EString.pad(s);
-        if (quit.find(s)) {
+        if (quit.contains(s)) {
             finished = true;
             return finl;
         }
