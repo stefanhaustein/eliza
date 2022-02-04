@@ -12,52 +12,44 @@ public class Key {
     /** The numerical rank */
     private int rank;
     /** The list of decompositions */
-    private List<Decomposition> decomp;
+    private List<DecompositionRule> decompositionRuleList;
 
     /**
      *  Initialize the key.
      */
-    Key(String key, int rank, List<Decomposition> decomp) {
+    Key(String key, int rank, List<DecompositionRule> decompositionRuleList) {
         this.key = key;
         this.rank = rank;
-        this.decomp = decomp;
+        this.decompositionRuleList = decompositionRuleList;
     }
 
     /**
-     *  Another initialization for gotoKey.
+     *  Initialization for the gotoKey case.
      */
     Key() {
         key = null;
         rank = 0;
-        decomp = null;
+        decompositionRuleList = null;
     }
 
     public void copy(Key k) {
-        key = k.key();
-        rank = k.rank();
-        decomp = k.decomp();
+        key = k.getKey();
+        rank = k.getRank();
+        decompositionRuleList = k.getDecompositionRuleList();
     }
 
 
-    /**
-     *  Get the key value.
-     */
-    public String key() {
+    public String getKey() {
         return key;
     }
 
-    /**
-     *  Get the rank.
-     */
-    public int rank() {
+    public int getRank() {
         return rank;
     }
 
-    /**
-     *  Get the decomposition list.
-     */
-    public List<Decomposition> decomp() {
-        return decomp;
+
+    public List<DecompositionRule> getDecompositionRuleList() {
+        return decompositionRuleList;
     }
 }
 
